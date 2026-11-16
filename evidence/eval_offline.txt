@@ -1,0 +1,20 @@
+$ python scripts/eval_rag.py
+
+
+=== Offline: retrieval ===
+  ✓ calm music for studying                        notes=['mood:chill', 'genre:classical', 'activity:studying']  recall=100%
+  ✓ upbeat songs for a road trip                   notes=['activity:road trip', 'genre:country', 'mood:nostalgic']  recall=100%
+  ✓ heavy stuff for lifting weights at the gym     notes=['mood:aggressive', 'genre:metal', 'activity:workout']  recall=100%
+  ✓ songs to fall asleep to                        notes=['activity:sleep', 'mood:happy', 'mood:intense']  recall=100%
+  ✓ i just got dumped and want to wallow           notes=['activity:heartbreak']  recall=100%
+  ✓ romantic dinner date night                     notes=['activity:date night', 'mood:romantic', 'genre:r&b']  recall=100%
+  ✓ late night drive through neon city streets     notes=['activity:night drive', 'mood:moody', 'genre:synthwave']  recall=100%
+  ✓ cozy rainy day with tea                        notes=['activity:rainy day', 'mood:melancholic', 'genre:lofi']  recall=100%
+  ✗ big festival drops to dance all night          notes=['genre:edm', 'mood:euphoric', 'genre:pop']  recall=100%
+  ✓ acoustic campfire singalong                    notes=['genre:folk', 'mood:hopeful', 'mood:relaxed']  recall=100%
+  ✓ sunny beach day good vibes                     notes=['genre:reggae', 'mood:happy', 'activity:rainy day']  recall=100%
+  ✓ smooth saxophone for a quiet evening           notes=['genre:r&b', 'genre:jazz', 'mood:hopeful']  recall=100%
+
+  notes hit@4: 92%   candidate recall@5: 100%   adversarial blocked: 7/7
+
+Saved logs/eval_20261115_231422.json

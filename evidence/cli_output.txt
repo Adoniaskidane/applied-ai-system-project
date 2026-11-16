@@ -1,0 +1,460 @@
+$ python src/main.py
+
+Loaded songs: 945
+
+================================================================
+  🎵  Top Recommendations — High-Energy Pop
+================================================================
+  Profile: pop · happy · energy 0.85 · non-acoustic
+----------------------------------------------------------------
+
+  #1  Levitating (feat. DaBaby)  —  Dua Lipa, DaBaby
+      pop / happy
+      Score: 5.91 / 6.0  ████████████████████
+      Why:
+        • genre match: pop (+1.0)
+        • mood match: happy (+1.5)
+        • energy 0.82 vs target 0.85 (+2.91)
+        • non-acoustic sound (+0.49)
+
+  #2  What Makes You Beautiful  —  One Direction
+      pop / happy
+      Score: 5.82 / 6.0  ███████████████████░
+      Why:
+        • genre match: pop (+1.0)
+        • mood match: happy (+1.5)
+        • energy 0.79 vs target 0.85 (+2.82)
+        • non-acoustic sound (+0.49)
+
+  #3  Calm Down (with Selena Gomez)  —  Rema, Selena Gomez
+      pop / happy
+      Score: 5.69 / 6.0  ███████████████████░
+      Why:
+        • genre match: pop (+1.0)
+        • mood match: happy (+1.5)
+        • energy 0.81 vs target 0.85 (+2.88)
+        • non-acoustic sound (+0.31)
+
+  #4  Mood (feat. iann dior)  —  24kGoldn, iann dior
+      pop / happy
+      Score: 5.52 / 6.0  ██████████████████░░
+      Why:
+        • genre match: pop (+1.0)
+        • mood match: happy (+1.5)
+        • energy 0.72 vs target 0.85 (+2.61)
+        • non-acoustic sound (+0.41)
+
+  #5  Young Folks  —  Peter Bjorn and John
+      indie pop / happy
+      Score: 5.37 / 6.0  ██████████████████░░
+      Why:
+        • related genre: indie pop (+0.5)
+        • mood match: happy (+1.5)
+        • energy 0.81 vs target 0.85 (+2.88)
+        • non-acoustic sound (+0.49)
+
+================================================================
+
+================================================================
+  🎵  Top Recommendations — Chill Lofi
+================================================================
+  Profile: lofi · chill · energy 0.40 · acoustic
+----------------------------------------------------------------
+
+  #1  Wonderland  —  So_nny
+      lofi / chill
+      Score: 5.83 / 6.0  ███████████████████░
+      Why:
+        • genre match: lofi (+1.0)
+        • mood match: chill (+1.5)
+        • energy 0.37 vs target 0.40 (+2.91)
+        • acoustic sound (+0.42)
+
+  #2  Common Sunflower  —  Magn Us
+      lofi / chill
+      Score: 5.62 / 6.0  ███████████████████░
+      Why:
+        • genre match: lofi (+1.0)
+        • mood match: chill (+1.5)
+        • energy 0.48 vs target 0.40 (+2.76)
+        • acoustic sound (+0.36)
+
+  #3  marcella daydreaming  —  rec.memos
+      lofi / chill
+      Score: 5.61 / 6.0  ███████████████████░
+      Why:
+        • genre match: lofi (+1.0)
+        • mood match: chill (+1.5)
+        • energy 0.31 vs target 0.40 (+2.73)
+        • acoustic sound (+0.39)
+
+  #4  are and be  —  wavcrush
+      lofi / chill
+      Score: 5.28 / 6.0  ██████████████████░░
+      Why:
+        • genre match: lofi (+1.0)
+        • mood match: chill (+1.5)
+        • energy 0.19 vs target 0.40 (+2.37)
+        • acoustic sound (+0.41)
+
+  #5  Club Row  —  Clint Is Quinn
+      lofi / chill
+      Score: 5.21 / 6.0  █████████████████░░░
+      Why:
+        • genre match: lofi (+1.0)
+        • mood match: chill (+1.5)
+        • energy 0.16 vs target 0.40 (+2.28)
+        • acoustic sound (+0.43)
+
+================================================================
+
+================================================================
+  🎵  Top Recommendations — Deep Intense Rock
+================================================================
+  Profile: rock · intense · energy 0.90 · non-acoustic
+----------------------------------------------------------------
+
+  #1  Smells Like Teen Spirit  —  Nirvana
+      rock / intense
+      Score: 5.97 / 6.0  ████████████████████
+      Why:
+        • genre match: rock (+1.0)
+        • mood match: intense (+1.5)
+        • energy 0.91 vs target 0.90 (+2.97)
+        • non-acoustic sound (+0.50)
+
+  #2  Superheroes  —  The Script
+      rock / intense
+      Score: 5.97 / 6.0  ████████████████████
+      Why:
+        • genre match: rock (+1.0)
+        • mood match: intense (+1.5)
+        • energy 0.89 vs target 0.90 (+2.97)
+        • non-acoustic sound (+0.50)
+
+  #3  High Hopes  —  Panic! At The Disco
+      rock / intense
+      Score: 5.91 / 6.0  ████████████████████
+      Why:
+        • genre match: rock (+1.0)
+        • mood match: intense (+1.5)
+        • energy 0.90 vs target 0.90 (+3.00)
+        • non-acoustic sound (+0.41)
+
+  #4  On Top Of The World  —  Imagine Dragons
+      rock / intense
+      Score: 5.90 / 6.0  ████████████████████
+      Why:
+        • genre match: rock (+1.0)
+        • mood match: intense (+1.5)
+        • energy 0.92 vs target 0.90 (+2.94)
+        • non-acoustic sound (+0.46)
+
+  #5  Don't Stop Me Now - Remastered 2011  —  Queen
+      rock / intense
+      Score: 5.88 / 6.0  ████████████████████
+      Why:
+        • genre match: rock (+1.0)
+        • mood match: intense (+1.5)
+        • energy 0.87 vs target 0.90 (+2.91)
+        • non-acoustic sound (+0.47)
+
+================================================================
+
+================================================================
+  🎵  Top Recommendations — my_profile
+================================================================
+  Profile: reggae · focused · energy 0.80 · acoustic
+----------------------------------------------------------------
+
+  #1  Redemption Song  —  Bob Marley & The Wailers
+      reggae / focused
+      Score: 4.18 / 6.0  ██████████████░░░░░░
+      Why:
+        • genre match: reggae (+1.0)
+        • mood match: focused (+1.5)
+        • energy 0.26 vs target 0.80 (+1.38)
+        • acoustic sound (+0.30)
+
+  #2  Buy Dirt  —  Jordan Davis, Luke Bryan
+      country / focused
+      Score: 4.10 / 6.0  ██████████████░░░░░░
+      Why:
+        • mood match: focused (+1.5)
+        • energy 0.56 vs target 0.80 (+2.28)
+        • acoustic sound (+0.32)
+
+  #3  Wavin' Flag - Coca-Cola® Celebration Mix  —  K'NAAN
+      reggae / happy
+      Score: 4.07 / 6.0  ██████████████░░░░░░
+      Why:
+        • genre match: reggae (+1.0)
+        • energy 0.77 vs target 0.80 (+2.91)
+        • acoustic sound (+0.15)
+
+  #4  Red Dress  —  MAGIC!
+      reggae / happy
+      Score: 4.04 / 6.0  █████████████░░░░░░░
+      Why:
+        • genre match: reggae (+1.0)
+        • energy 0.80 vs target 0.80 (+3.00)
+        • acoustic sound (+0.04)
+
+  #5  Angel  —  Shaggy, Rayvon
+      reggae / happy
+      Score: 3.97 / 6.0  █████████████░░░░░░░
+      Why:
+        • genre match: reggae (+1.0)
+        • energy 0.77 vs target 0.80 (+2.91)
+        • acoustic sound (+0.06)
+
+================================================================
+
+================================================================
+  🎵  Top Recommendations — Edge: Energetic but Sad
+================================================================
+  Profile: blues · sad · energy 0.90 · non-acoustic
+----------------------------------------------------------------
+
+  #1  The Thrill Is Gone  —  B.B. King, Tracy Chapman
+      blues / sad
+      Score: 4.72 / 6.0  ████████████████░░░░
+      Why:
+        • genre match: blues (+1.0)
+        • mood match: sad (+1.5)
+        • energy 0.49 vs target 0.90 (+1.77)
+        • non-acoustic sound (+0.46)
+
+  #2  I'm Not In Love  —  10cc
+      blues / sad
+      Score: 4.51 / 6.0  ███████████████░░░░░
+      Why:
+        • genre match: blues (+1.0)
+        • mood match: sad (+1.5)
+        • energy 0.52 vs target 0.90 (+1.86)
+        • non-acoustic sound (+0.16)
+
+  #3  For the Glory  —  All Good Things
+      blues / intense
+      Score: 4.47 / 6.0  ███████████████░░░░░
+      Why:
+        • genre match: blues (+1.0)
+        • energy 0.89 vs target 0.90 (+2.97)
+        • non-acoustic sound (+0.50)
+
+  #4  With A Little Help From My Friends  —  Joe Cocker
+      blues / sad
+      Score: 4.45 / 6.0  ███████████████░░░░░
+      Why:
+        • genre match: blues (+1.0)
+        • mood match: sad (+1.5)
+        • energy 0.43 vs target 0.90 (+1.59)
+        • non-acoustic sound (+0.35)
+
+  #5  Drunk (And I Don't Wanna Go Home)  —  Elle King, Miranda Lambert
+      blues / intense
+      Score: 4.43 / 6.0  ███████████████░░░░░
+      Why:
+        • genre match: blues (+1.0)
+        • energy 0.88 vs target 0.90 (+2.94)
+        • non-acoustic sound (+0.49)
+
+================================================================
+
+================================================================
+  🎵  Top Recommendations — Edge: Unknown Genre (k-pop)
+================================================================
+  Profile: k-pop · dreamy · energy 0.70 · acoustic
+----------------------------------------------------------------
+
+  #1  Tirtha Vithal Kshetra Vithal  —  Bhimsen Joshi
+      classical / nostalgic
+      Score: 3.42 / 6.0  ███████████░░░░░░░░░
+      Why:
+        • energy 0.69 vs target 0.70 (+2.97)
+        • acoustic sound (+0.46)
+
+  #2  frozen grapes  —  vibe academy
+      lofi / nostalgic
+      Score: 3.36 / 6.0  ███████████░░░░░░░░░
+      Why:
+        • energy 0.66 vs target 0.70 (+2.88)
+        • acoustic sound (+0.47)
+
+  #3  Ritual  —  Talented Mr Tipsy
+      lofi / nostalgic
+      Score: 3.31 / 6.0  ███████████░░░░░░░░░
+      Why:
+        • energy 0.72 vs target 0.70 (+2.94)
+        • acoustic sound (+0.38)
+
+  #4  Thillana - Dhanashree - Adi  —  Rajhesh Vaidhya
+      classical / uplifting
+      Score: 3.29 / 6.0  ███████████░░░░░░░░░
+      Why:
+        • energy 0.70 vs target 0.70 (+3.00)
+        • acoustic sound (+0.29)
+
+  #5  You & Jennifer  —  bülow
+      indie pop / moody
+      Score: 3.26 / 6.0  ███████████░░░░░░░░░
+      Why:
+        • energy 0.70 vs target 0.70 (+3.00)
+        • acoustic sound (+0.26)
+
+================================================================
+
+================================================================
+  🎵  Top Recommendations — Edge: Acoustic Metalhead
+================================================================
+  Profile: metal · aggressive · energy 0.98 · acoustic
+----------------------------------------------------------------
+
+  #1  Duality  —  Slipknot
+      metal / aggressive
+      Score: 5.50 / 6.0  ██████████████████░░
+      Why:
+        • genre match: metal (+1.0)
+        • mood match: aggressive (+1.5)
+        • energy 0.98 vs target 0.98 (+3.00)
+        • acoustic sound (+0.00)
+
+  #2  Nero Forte  —  Slipknot
+      metal / aggressive
+      Score: 5.50 / 6.0  ██████████████████░░
+      Why:
+        • genre match: metal (+1.0)
+        • mood match: aggressive (+1.5)
+        • energy 0.98 vs target 0.98 (+3.00)
+        • acoustic sound (+0.00)
+
+  #3  Hive Mind  —  Slipknot
+      metal / aggressive
+      Score: 5.47 / 6.0  ██████████████████░░
+      Why:
+        • genre match: metal (+1.0)
+        • mood match: aggressive (+1.5)
+        • energy 0.99 vs target 0.98 (+2.97)
+        • acoustic sound (+0.00)
+
+  #4  The Dying Song (Time To Sing)  —  Slipknot
+      metal / aggressive
+      Score: 5.47 / 6.0  ██████████████████░░
+      Why:
+        • genre match: metal (+1.0)
+        • mood match: aggressive (+1.5)
+        • energy 0.99 vs target 0.98 (+2.97)
+        • acoustic sound (+0.00)
+
+  #5  Unstoppable  —  Disturbed
+      metal / aggressive
+      Score: 5.47 / 6.0  ██████████████████░░
+      Why:
+        • genre match: metal (+1.0)
+        • mood match: aggressive (+1.5)
+        • energy 0.99 vs target 0.98 (+2.97)
+        • acoustic sound (+0.00)
+
+================================================================
+
+================================================================
+  🎵  Top Recommendations — Edge: Energy Out of Range
+================================================================
+  Profile: edm · euphoric · energy 1.50 · non-acoustic
+----------------------------------------------------------------
+
+  #1  Levels - Radio Edit  —  Avicii
+      edm / euphoric
+      Score: 4.14 / 6.0  ██████████████░░░░░░
+      Why:
+        • genre match: edm (+1.0)
+        • mood match: euphoric (+1.5)
+        • energy 0.89 vs target 1.50 (+1.17)
+        • non-acoustic sound (+0.47)
+
+  #2  You Spin Me Round (Like a Record)  —  Dead Or Alive
+      synthwave / euphoric
+      Score: 3.38 / 6.0  ███████████░░░░░░░░░
+      Why:
+        • mood match: euphoric (+1.5)
+        • energy 0.96 vs target 1.50 (+1.38)
+        • non-acoustic sound (+0.50)
+
+  #3  Hit the Floor  —  Linkin Park
+      metal / euphoric
+      Score: 3.35 / 6.0  ███████████░░░░░░░░░
+      Why:
+        • mood match: euphoric (+1.5)
+        • energy 0.96 vs target 1.50 (+1.38)
+        • non-acoustic sound (+0.47)
+
+  #4  Don't Leave Me This Way (with Sarah Jane Morris)  —  The Communards, Sarah Jane Morris
+      synthwave / euphoric
+      Score: 3.22 / 6.0  ███████████░░░░░░░░░
+      Why:
+        • mood match: euphoric (+1.5)
+        • energy 0.93 vs target 1.50 (+1.29)
+        • non-acoustic sound (+0.43)
+
+  #5  The Look Of Love, Pt.1  —  ABC
+      synthwave / euphoric
+      Score: 3.17 / 6.0  ███████████░░░░░░░░░
+      Why:
+        • mood match: euphoric (+1.5)
+        • energy 0.91 vs target 1.50 (+1.23)
+        • non-acoustic sound (+0.45)
+
+================================================================
+
+================================================================
+  🎵  Top Recommendations — Edge: Messy Input Casing
+================================================================
+  Profile:   LoFi  · CHILL · energy 0.40 · acoustic
+----------------------------------------------------------------
+
+  #1  Wonderland  —  So_nny
+      lofi / chill
+      Score: 5.83 / 6.0  ███████████████████░
+      Why:
+        • genre match: lofi (+1.0)
+        • mood match: chill (+1.5)
+        • energy 0.37 vs target 0.40 (+2.91)
+        • acoustic sound (+0.42)
+
+  #2  Common Sunflower  —  Magn Us
+      lofi / chill
+      Score: 5.62 / 6.0  ███████████████████░
+      Why:
+        • genre match: lofi (+1.0)
+        • mood match: chill (+1.5)
+        • energy 0.48 vs target 0.40 (+2.76)
+        • acoustic sound (+0.36)
+
+  #3  marcella daydreaming  —  rec.memos
+      lofi / chill
+      Score: 5.61 / 6.0  ███████████████████░
+      Why:
+        • genre match: lofi (+1.0)
+        • mood match: chill (+1.5)
+        • energy 0.31 vs target 0.40 (+2.73)
+        • acoustic sound (+0.39)
+
+  #4  are and be  —  wavcrush
+      lofi / chill
+      Score: 5.28 / 6.0  ██████████████████░░
+      Why:
+        • genre match: lofi (+1.0)
+        • mood match: chill (+1.5)
+        • energy 0.19 vs target 0.40 (+2.37)
+        • acoustic sound (+0.41)
+
+  #5  Club Row  —  Clint Is Quinn
+      lofi / chill
+      Score: 5.21 / 6.0  █████████████████░░░
+      Why:
+        • genre match: lofi (+1.0)
+        • mood match: chill (+1.5)
+        • energy 0.16 vs target 0.40 (+2.28)
+        • acoustic sound (+0.43)
+
+================================================================
