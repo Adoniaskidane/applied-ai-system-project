@@ -110,6 +110,40 @@ pip install -r requirements.txt
 python -m src.main
 ```
 
+4. Or launch the TuneJudge web GUI (Streamlit):
+
+```bash
+streamlit run src/app.py
+```
+
+The GUI has the same scoring logic as the CLI, organized into five pages in the top navigation:
+
+- **AI Assistant (home):** type what you want to hear, or click an example ("Road trip", "Deep focus"…). You get grounded recommendations with an explanation for each pick and a step-by-step view of how the answer was built. The model, auto-switch and number of songs are under **Settings**. See [Ask AI: RAG + guardrails](#-ask-ai-rag--guardrails) below.
+- **Explore:** set a taste profile in the sidebar (start from any preset in `main.py`, including the edge-case profiles, or type your own genre) and get ranked song cards with a match ring, a colored bar showing which rules earned points, and the "why" reasons.
+- **Insights:** a stacked bar chart of each pick's points by rule with plain-language takeaways, plus **Compare profiles**, which shows two profiles side by side with shared songs highlighted. The sidebar's **Scoring lab** changes each rule's weight live.
+- **Catalog:** every song plotted by energy vs. acousticness with your picks highlighted, plus the full searchable ranking.
+- **About:** the pipeline, reliability settings and live offline-evaluation metrics.
+- **Listen:** every recommendation card has an embedded Spotify player, and the Catalog table links each song to Spotify.
+- **Guardrails:** a warning when your genre or mood isn't in the catalog or no song is a strong match, and energy values outside 0–1 are clamped instead of producing negative points.
+
+### The song catalog
+
+`data/songs.csv` holds about 950 real, **English-language** songs with no duplicates. Their Spotify track ids and audio features (energy, tempo, valence, danceability, acousticness) come from the public [Spotify Tracks Dataset](https://huggingface.co/datasets/maharshipandya/spotify-tracks-dataset).
+
+- **Songs 1–19** are hand-picked, one per original genre/mood slot (Levitating, Smells Like Teen Spirit, Take Five, Nightcall, ...), with moods assigned by hand.
+- **Songs 20+** are the most popular tracks in each of the 16 genres (up to 70 per genre). Latin songs are excluded. The dataset has no mood labels, so each song gets the mood of the closest example in the original hand-labeled catalog, compared on energy, valence, danceability and acousticness. These moods are approximate.
+- **English only:** the dataset has no language field either, and its genre labels are noisy (Mexican banda filed as r&b, Punjabi rap as hip hop). A vocal track is kept only if its title and its artist's titles read as English, the artist isn't mostly filed under non-English genres, and the artist isn't on a hand-reviewed exclusion list in `scripts/build_catalog.py`. **Instrumental tracks are kept**, since they have no lyrics; that's what keeps lofi, ambient and classical in the catalog. Because of this filter, some genres have fewer songs (reggae 22, r&b 32, hip hop 38).
+- **No duplicates:** the dataset lists many songs more than once (remasters, re-releases, the same track under several genres). Songs are de-duplicated by Spotify id and by normalized title + lead artist.
+
+To rebuild the catalog (downloads the dataset, about 20 MB, into `.cache/`):
+
+```bash
+python scripts/build_catalog.py                 # default: up to 70 songs per genre
+python scripts/build_catalog.py --per-genre 100 # bigger catalog (new songs may need a language review)
+```
+
+The original catalog of 20 made-up songs, which the sample outputs below and the model card were written against, is kept in `data/songs_original.csv`.
+
 ### Running Tests
 
 Run the starter tests with:
@@ -119,6 +153,47 @@ pytest
 ```
 
 You can add more tests in `tests/test_recommender.py`.
+
+`tests/test_rag.py` covers the AI pipeline below with a fake LLM client (plus fake Claude, Gemini and OpenAI SDK responses, and auto-switch cases), so the whole suite runs offline and free.
+
+### 🤖 Ask AI: RAG + guardrails
+
+The **AI Assistant** page takes a plain-English request ("calm music for studying", "i just got dumped") and returns grounded recommendations. Code: [`src/rag.py`](src/rag.py). Architecture: [`diagrams/architecture.mmd`](diagrams/architecture.mmd).
+
+```mermaid
+flowchart LR
+    A[request] --> B{input guardrail} --> C[retrieve notes] --> D[LLM parser] --> E{profile guardrail}
+    E --> F[retrieve songs] --> G[rule-based scorer] --> H[LLM explainer] --> I{grounding check} --> J[results + log]
+```
+
+1. **Input guardrail:** blocks empty, very long (over 500 characters) or prompt-injection requests before any API call is made.
+2. **Retrieve:** a small TF-IDF index searches [`data/knowledge/music_notes.md`](data/knowledge/music_notes.md) (genre, mood and activity notes built from catalog averages) for notes that match the request.
+3. **Parse (LLM):** using those notes, the model converts the request into a taste profile through structured output. If the request isn't about music, it's declined.
+4. **Profile guardrail:** genre and mood are snapped to real catalog values, energy is clamped to 0–1, and every fix is shown to the user.
+5. **Retrieve + score:** the song index pulls 120 candidates, and the same transparent scorer as the rest of the app ranks them.
+6. **Explain (LLM):** the model writes a "why" for each pick using only the retrieved song data.
+7. **Grounding guardrail:** the explanation is rejected if it names a song that wasn't recommended, uses wrong song ids, or quotes a number that isn't in the data. In that case the app falls back to the scorer's own reasons.
+
+**Three AI providers:** the LLM steps can run on **Claude** (`claude-opus-5-5`, Anthropic), **Gemini** (`gemini-3.8-flash`, Google) or **OpenAI** (`gpt-6.1-terra`). Retrieval, scoring and all guardrails are identical for all three. `LLM_PROVIDER` in `.env` sets the default, and the AI Assistant's Settings let you pick one.
+
+**Auto-switch:** each AI call times out after 30 s (`LLM_TIMEOUT_S`). If the chosen provider times out, is overloaded (503/529) or is rate-limited (429), the pipeline retries the same step on the next provider that has a key, and the app shows "Gemini was busy, so Claude answered this one". Refusals and bad API keys are never passed to another provider, so they stay visible. You can turn this off with the toggle in the AI Assistant's Settings. The eval script never auto-switches, so each score belongs to the provider it names. Each request is logged to `logs/tunejudge.jsonl` along with the provider and model that answered.
+
+To add your keys, copy `.env.example` to `.env` and paste in any of the keys (one is enough). `.env` is git-ignored, and a key exported in your shell takes priority over it.
+
+```bash
+cp .env.example .env        # then edit .env: ANTHROPIC_API_KEY=sk-ant-...  /  GEMINI_API_KEY=...  /  OPENAI_API_KEY=sk-...
+streamlit run src/app.py
+```
+
+**Evaluation:**
+
+```bash
+python scripts/eval_rag.py          # offline (free): notes hit@4, candidate recall@5, adversarial inputs blocked
+python scripts/eval_rag.py --live                  # 12 golden + 2 off-topic queries on LLM_PROVIDER (~26 API calls)
+python scripts/eval_rag.py --live --provider all   # every provider with a key, same queries
+```
+
+Offline results: notes hit@4 **92%** (11/12; "festival drops" found the EDM/euphoric notes, not the party note), candidate recall@5 **100%**, adversarial inputs blocked **7/7**. Each run writes a JSON report to `logs/`.
 
 ---
 

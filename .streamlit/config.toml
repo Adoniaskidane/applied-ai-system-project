@@ -1,0 +1,23 @@
+# TuneJudge theme.
+# The app's custom cards and charts follow `base`, so to switch the whole app
+# to dark mode, swap this block for the dark one below and restart Streamlit.
+
+[theme]
+base = "light"
+primaryColor = "#6250d6"
+backgroundColor = "#f7f6f3"
+secondaryBackgroundColor = "#efede8"
+textColor = "#1b1b1f"
+font = "sans serif"
+
+# --- Dark mode ---
+# [theme]
+# base = "dark"
+# primaryColor = "#a197f5"
+# backgroundColor = "#15151c"
+# secondaryBackgroundColor = "#1d1d25"
+# textColor = "#f0efec"
+# font = "sans serif"
+
+[browser]
+gatherUsageStats = false

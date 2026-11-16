@@ -1,0 +1,98 @@
+%% TuneJudge — Applied AI System Architecture
+%% Green = rule-based core | Dashed blue = AI / RAG | Orange = guardrail | Purple = testing & review
+flowchart TD
+    %% ---------------- Offline data pipeline ----------------
+    subgraph OFFLINE["① Data + knowledge base"]
+        HF[("Spotify Tracks Dataset<br/>(Hugging Face)")]
+        BUILD["scripts/build_catalog.py<br/>English filter · de-dup · mood labeling"]
+        CSV[("data/songs.csv<br/>945 songs + audio features")]
+        NOTES[("data/knowledge/music_notes.md<br/>genre · mood · activity notes")]
+        IDX["TF-IDF indexes · src/rag.py<br/>notes index + song index"]
+        HF --> BUILD --> CSV
+        CSV --> IDX
+        NOTES --> IDX
+    end
+
+    %% ---------------- Input ----------------
+    USER(["👤 User"])
+    UI["Streamlit UI · src/app.py<br/>AI Assistant page (home) · Explore / Insights / Catalog"]
+    USER -->|"'upbeat songs for a road trip'"| UI
+    USER -->|"genre / mood / energy / acoustic"| UI
+
+    %% ---------------- Input guardrails ----------------
+    subgraph GIN["② Input guardrail · check_request()"]
+        G1{"empty? over 500 chars?<br/>prompt injection? no words?"}
+        REFUSE["Friendly refusal<br/>(no API call made)"]
+    end
+    UI -->|"free text"| G1
+    G1 -->|"blocked"| REFUSE --> UI
+
+    %% ---------------- RAG pipeline ----------------
+    subgraph RAG["③ RAG pipeline · TuneJudgeRAG.run()"]
+        RNOTES["Retrieve top-4 notes<br/>for the request"]
+        PARSE["LLM parser · Claude, Gemini or OpenAI<br/>LLM_PROVIDER · ClaudeLLM / GeminiLLM / OpenAILLM<br/>30 s timeout · auto-switch to next provider if busy<br/>structured output ➜ ParsedRequest<br/>on_topic · genre · mood · energy · acoustic"]
+        OFFT["Off-topic ➜ decline"]
+        G2{"Profile guardrail · validate_profile()<br/>snap to catalog genre/mood<br/>clamp energy 0–1 · coerce types"}
+        RETR["Retrieve 120 candidate songs<br/>request + profile terms"]
+        SCORE["Scorer · src/recommender.py<br/>recommend_songs() — weights from sidebar"]
+        GEN["LLM explainer · same provider<br/>structured output ➜ summary + one 'why' per song<br/>uses ONLY retrieved songs + notes"]
+    end
+    G1 -->|"ok"| RNOTES --> PARSE
+    IDX --> RNOTES
+    PARSE -->|"on_topic = false"| OFFT --> UI
+    PARSE --> G2 --> RETR
+    IDX --> RETR
+    UI -->|"sidebar profile<br/>(no AI needed)"| SCORE
+    RETR --> SCORE --> GEN
+
+    %% ---------------- Output guardrails ----------------
+    subgraph GOUT["④ Output guardrails"]
+        G3{"Grounding check · check_grounding()<br/>song ids = recommended ids?<br/>no other catalog titles?<br/>every number in the data?"}
+        FALLBACK["Fallback: rule-based reasons<br/>from the scorer"]
+        WARN["Confidence warnings<br/>unknown genre/mood · best match under 55%"]
+    end
+    GEN --> G3
+    G3 -->|"problem found / API error"| FALLBACK
+    SCORE --> WARN
+
+    %% ---------------- Output ----------------
+    OUT["Results in UI<br/>cards + grounded 'why' · Spotify player<br/>pipeline trace expander"]
+    LOG[("logs/tunejudge.jsonl<br/>every request: status, profile,<br/>fixes, grounding, latency")]
+    G3 -->|"pass"| OUT
+    FALLBACK --> OUT
+    WARN --> OUT
+    OUT --> USER
+    OUT -.-> LOG
+
+    %% ---------------- Testing & evaluation ----------------
+    subgraph TEST["⑤ Testing & evaluation"]
+        T1["tests/test_recommender.py<br/>scoring math · catalog integrity"]
+        T2["tests/test_rag.py · fake LLM + fake SDKs<br/>retrieval · all 3 guardrails<br/>refusal · API failure · auto-switch · hallucination fallback"]
+        T3["scripts/eval_rag.py<br/>offline: notes hit@4 · candidate recall · blocked %<br/>--live --provider claude|gemini|openai|all<br/>genre/mood/energy accuracy · grounded % · latency"]
+        HUMAN["🧑 Human review<br/>read eval report + logs<br/>record in model_card.md"]
+    end
+    T1 -.-> SCORE
+    T1 -.-> CSV
+    T2 -.-> G1
+    T2 -.-> G2
+    T2 -.-> G3
+    T2 -.-> RETR
+    T3 -.-> RETR
+    T3 -.-> PARSE
+    T3 -.-> GEN
+    T3 --> HUMAN
+    LOG -.-> HUMAN
+    HUMAN -.->|"tune notes / prompts / weights"| NOTES
+
+    %% ---------------- Styles ----------------
+    classDef existing fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b1b1b
+    classDef ai fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,stroke-dasharray:5 4,color:#1b1b1b
+    classDef guard fill:#fff3e0,stroke:#ef6c00,stroke-width:2px,color:#1b1b1b
+    classDef test fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px,color:#1b1b1b
+    classDef actor fill:#fafafa,stroke:#424242,stroke-width:2px,color:#1b1b1b
+
+    class HF,BUILD,CSV,UI,SCORE,OUT existing
+    class NOTES,IDX,RNOTES,PARSE,RETR,GEN,LOG ai
+    class G1,REFUSE,G2,G3,FALLBACK,WARN,OFFT guard
+    class T1,T2,T3,HUMAN test
+    class USER actor

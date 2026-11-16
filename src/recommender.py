@@ -1,6 +1,6 @@
 import csv
 from typing import List, Dict, Tuple, Optional
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
 
 # Genre pairs that earn partial credit (+0.5) instead of a full match.
 RELATED_GENRES = {
@@ -24,6 +24,7 @@ class Song:
     valence: float
     danceability: float
     acousticness: float
+    spotify_id: str = ""  # Spotify track id, used by the GUI to embed a player
 
 @dataclass
 class UserProfile:
@@ -45,12 +46,15 @@ class Recommender:
         self.songs = songs
 
     def recommend(self, user: UserProfile, k: int = 5) -> List[Song]:
-        # TODO: Implement recommendation logic
-        return self.songs[:k]
+        """Rank songs with the same scoring rules as score_song and return the top k."""
+        prefs = asdict(user)
+        ranked = sorted(self.songs, key=lambda s: score_song(prefs, asdict(s))[0], reverse=True)
+        return ranked[:k]
 
     def explain_recommendation(self, user: UserProfile, song: Song) -> str:
-        # TODO: Implement explanation logic
-        return "Explanation placeholder"
+        """Plain-language reasons this song earned its score."""
+        score, reasons = score_song(asdict(user), asdict(song))
+        return f"Score {score:.2f}: " + "; ".join(reasons)
 
 def load_songs(csv_path: str) -> List[Dict]:
     """Read songs.csv into a list of dicts, converting numeric columns to int/float."""
@@ -67,51 +71,70 @@ def load_songs(csv_path: str) -> List[Dict]:
             songs.append(row)
     return songs
 
-def score_song(user_prefs: Dict, song: Dict) -> Tuple[float, List[str]]:
-    """Score one song against user prefs; return (score, reasons) per the Algorithm Recipe."""
-    # TODO: Implement scoring logic using your Algorithm Recipe from Phase 2.
-    # Expected return format: (score, reasons)
-    score = 0.0
+DEFAULT_WEIGHTS = {
+    "genre": 1.0,     # EXPERIMENT: halved from 2.0 (related genre earns half)
+    "mood": 1.5,
+    "energy": 3.0,    # EXPERIMENT: doubled from 1.5
+    "acoustic": 0.5,
+}
+
+
+def max_score(weights: Optional[Dict] = None) -> float:
+    """Best possible score under the given weights (every rule fully satisfied)."""
+    w = {**DEFAULT_WEIGHTS, **(weights or {})}
+    return sum(w.values())
+
+
+def score_breakdown(user_prefs: Dict, song: Dict, weights: Optional[Dict] = None) -> Tuple[Dict[str, float], List[str]]:
+    """Return per-feature points ({genre, mood, energy, acoustic}) and the matching reasons."""
+    w = {**DEFAULT_WEIGHTS, **(weights or {})}
+    parts = {"genre": 0.0, "mood": 0.0, "energy": 0.0, "acoustic": 0.0}
     reasons = []
 
     user_genre = user_prefs["favorite_genre"].strip().lower()
     song_genre = song["genre"].strip().lower()
     if song_genre == user_genre:
-        score += 1.0  # EXPERIMENT: halved from 2.0
-        reasons.append(f"genre match: {song_genre} (+1.0)")
+        parts["genre"] = w["genre"]
+        reasons.append(f"genre match: {song_genre} (+{parts['genre']:.1f})")
     elif frozenset((user_genre, song_genre)) in RELATED_GENRES:
-        score += 0.5  # EXPERIMENT: halved from 1.0
-        reasons.append(f"related genre: {song_genre} (+0.5)")
+        parts["genre"] = w["genre"] / 2
+        reasons.append(f"related genre: {song_genre} (+{parts['genre']:.1f})")
 
     user_mood = user_prefs["favorite_mood"].strip().lower()
     song_mood = song["mood"].strip().lower()
     if song_mood == user_mood:
-        score += 1.5
-        reasons.append(f"mood match: {song_mood} (+1.5)")
+        parts["mood"] = w["mood"]
+        reasons.append(f"mood match: {song_mood} (+{parts['mood']:.1f})")
 
     # Closeness, not size: full points when energy equals the target.
-    # EXPERIMENT: doubled from 1.5
-    energy_points = 3.0 * (1 - abs(song["energy"] - user_prefs["target_energy"]))
-    score += energy_points
-    reasons.append(f"energy {song['energy']:.2f} vs target {user_prefs['target_energy']:.2f} (+{energy_points:.2f})")
+    parts["energy"] = w["energy"] * (1 - abs(song["energy"] - user_prefs["target_energy"]))
+    reasons.append(f"energy {song['energy']:.2f} vs target {user_prefs['target_energy']:.2f} (+{parts['energy']:.2f})")
 
     if user_prefs["likes_acoustic"]:
-        acoustic_points = 0.5 * song["acousticness"]
-        reasons.append(f"acoustic sound (+{acoustic_points:.2f})")
+        parts["acoustic"] = w["acoustic"] * song["acousticness"]
+        reasons.append(f"acoustic sound (+{parts['acoustic']:.2f})")
     else:
-        acoustic_points = 0.5 * (1 - song["acousticness"])
-        reasons.append(f"non-acoustic sound (+{acoustic_points:.2f})")
-    score += acoustic_points
+        parts["acoustic"] = w["acoustic"] * (1 - song["acousticness"])
+        reasons.append(f"non-acoustic sound (+{parts['acoustic']:.2f})")
 
+    return parts, reasons
+
+
+def score_song(user_prefs: Dict, song: Dict, weights: Optional[Dict] = None) -> Tuple[float, List[str]]:
+    """Score one song against user prefs; return (score, reasons) per the Algorithm Recipe."""
+    parts, reasons = score_breakdown(user_prefs, song, weights)
+    # Plain left-to-right addition (not sum(), which uses compensated
+    # summation on 3.12+) keeps scores identical to the original recipe.
+    score = 0.0
+    for points in parts.values():
+        score += points
     return score, reasons
 
-def recommend_songs(user_prefs: Dict, songs: List[Dict], k: int = 5) -> List[Tuple[Dict, float, str]]:
+def recommend_songs(user_prefs: Dict, songs: List[Dict], k: int = 5, weights: Optional[Dict] = None) -> List[Tuple[Dict, float, str]]:
     """Score every song, sort highest first, and return the top k as (song, score, explanation)."""
-    # TODO: Implement scoring and ranking logic
-    # Expected return format: (song_dict, score, explanation)
     scored = []
     for song in songs:
-        score, reasons = score_song(user_prefs, song)
+        score, reasons = score_song(user_prefs, song, weights)
         scored.append((song, score, "; ".join(reasons)))
 
     return sorted(scored, key=lambda item: item[1], reverse=True)[:k]

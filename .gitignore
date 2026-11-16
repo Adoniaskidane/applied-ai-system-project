@@ -13,3 +13,12 @@ venv/
 
 # Pytest cache
 .pytest_cache/
+
+# Downloaded datasets (scripts/build_catalog.py)
+.cache/
+
+# Request + eval logs (src/rag.py, scripts/eval_rag.py)
+logs/
+
+# Secrets: never commit your API key
+.env
